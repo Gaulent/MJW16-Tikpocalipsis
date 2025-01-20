@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://bh85hle8n11ly"]
+
+[ext_resource type="Texture2D" uid="uid://c3il0qqt7p3la" path="res://sprites/Background/carretera.png" id="1_dwe66"]
+[ext_resource type="Script" path="res://scripts/texture_scroll.gd" id="2_llxhy"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="3_q21ro"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_6ys5o"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkb2e"]
+shading_mode = 0
+albedo_texture = ExtResource("1_dwe66")
+uv1_scale = Vector3(1, 4, 1)
+uv1_offset = Vector3(0, 2, 0)
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gll8n"]
+material = SubResource("StandardMaterial3D_dkb2e")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0t3gv"]
+
+[node name="MainScene" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("WorldBoundaryShape3D_6ys5o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, -20)
+mesh = SubResource("PlaneMesh_gll8n")
+script = ExtResource("2_llxhy")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.99135, 0.481203)
+script = ExtResource("3_q21ro")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_0t3gv")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.995725, 0.0923706, 0, -0.0923706, 0.995725, 0, 0.32941, -0.481203)
+fov = 40.0
