@@ -1,8 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://bh85hle8n11ly"]
+[gd_scene load_steps=14 format=3 uid="uid://bh85hle8n11ly"]
 
 [ext_resource type="Texture2D" uid="uid://c3il0qqt7p3la" path="res://sprites/Background/carretera.png" id="1_dwe66"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_scqfp"]
+[ext_resource type="Script" path="res://scripts/enemy_spawner.gd" id="2_7mnj6"]
 [ext_resource type="Script" path="res://scripts/texture_scroll.gd" id="2_llxhy"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="3_q21ro"]
+[ext_resource type="PackedScene" uid="uid://b18bvnwgx0fh4" path="res://scenes/dalek.tscn" id="6_4u6jp"]
+[ext_resource type="Script" path="res://scripts/shredder.gd" id="10_61vem"]
+
+[sub_resource type="Curve3D" id="Curve3D_5mbvo"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, -5, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0t3gv"]
+radius = 0.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cl5ee"]
+size = Vector3(29.279, 14.152, 5.672)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_6ys5o"]
 
@@ -16,9 +33,48 @@ texture_filter = 0
 [sub_resource type="PlaneMesh" id="PlaneMesh_gll8n"]
 material = SubResource("StandardMaterial3D_dkb2e")
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0t3gv"]
-
 [node name="MainScene" type="Node3D"]
+
+[node name="GameManager" type="Node" parent="." groups=["GameManager"]]
+script = ExtResource("1_scqfp")
+
+[node name="EnemySpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
+script = ExtResource("2_7mnj6")
+spawn_types = Array[PackedScene]([ExtResource("6_4u6jp")])
+
+[node name="Timer" type="Timer" parent="EnemySpawner"]
+wait_time = 0.4
+autostart = true
+
+[node name="SpawnArea" type="Path3D" parent="EnemySpawner"]
+curve = SubResource("Curve3D_5mbvo")
+
+[node name="SpawnPoint" type="PathFollow3D" parent="EnemySpawner/SpawnArea"]
+transform = Transform3D(-4.37111e-08, 0, 0.999995, 0, 0.999991, 0, -0.999994, 0, -4.37112e-08, 0, 0, 0)
+progress = 5.0
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.057, -0.44)
+script = ExtResource("3_q21ro")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_0t3gv")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 0.995725, 0.0923706, 0, -0.0923706, 0.995725, 0, 1.5, 1.43)
+fov = 40.0
+
+[node name="Dalek" parent="." instance=ExtResource("6_4u6jp")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -24.7932)
+
+[node name="Shredder" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.67)
+script = ExtResource("10_61vem")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Shredder"]
+shape = SubResource("BoxShape3D_cl5ee")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -29,14 +85,3 @@ shape = SubResource("WorldBoundaryShape3D_6ys5o")
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, -20)
 mesh = SubResource("PlaneMesh_gll8n")
 script = ExtResource("2_llxhy")
-
-[node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.99135, 0.481203)
-script = ExtResource("3_q21ro")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
-shape = SubResource("CapsuleShape3D_0t3gv")
-
-[node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(1, 0, 0, 0, 0.995725, 0.0923706, 0, -0.0923706, 0.995725, 0, 0.32941, -0.481203)
-fov = 40.0
