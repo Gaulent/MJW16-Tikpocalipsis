@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://bls80wl7b1j2c"]
+
+[ext_resource type="Script" path="res://scripts/enemy_spawner.gd" id="1_vhhvh"]
+[ext_resource type="PackedScene" uid="uid://b18bvnwgx0fh4" path="res://scenes/enemies/dalek.tscn" id="2_rn1on"]
+[ext_resource type="PackedScene" uid="uid://tfosihbqd0vr" path="res://scenes/enemies/hole.tscn" id="3_fljqc"]
+[ext_resource type="PackedScene" uid="uid://8wwrgi1lh7wt" path="res://scenes/enemies/zombie.tscn" id="4_uutg7"]
+
+[sub_resource type="Curve3D" id="Curve3D_5mbvo"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 6.5, 0, 0, 0, 0, 0, 0, 0, 0, -6.5, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Spawner" type="Node3D"]
+script = ExtResource("1_vhhvh")
+spawn_types = Array[PackedScene]([ExtResource("2_rn1on"), ExtResource("3_fljqc"), ExtResource("4_uutg7")])
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.4
+autostart = true
+
+[node name="SpawnArea" type="Path3D" parent="."]
+curve = SubResource("Curve3D_5mbvo")
+
+[node name="SpawnPoint" type="PathFollow3D" parent="SpawnArea"]
+transform = Transform3D(-4.37111e-08, 0, 0.999995, 0, 0.999991, 0, -0.999994, 0, -4.37112e-08, 1.50003, 0, 0)
+progress = 5.0

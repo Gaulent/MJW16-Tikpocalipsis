@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dddvkibx8t8dq"]
+
+[ext_resource type="Script" path="res://scripts/enemy_controller.gd" id="1_4kjli"]
+[ext_resource type="Texture2D" uid="uid://bm2qvoymmlfr6" path="res://sprites/Objects/arbolPequeño.png" id="2_ro2hg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2cerh"]
+size = Vector3(1, 2.72375, 1)
+
+[node name="SmallTree" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.147143, 0)
+script = ExtResource("1_4kjli")
+walk_speed = 0.0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 1, 0.133448, 0.826734, 0)
+texture_filter = 0
+texture = ExtResource("2_ro2hg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45706, 0)
+shape = SubResource("BoxShape3D_2cerh")

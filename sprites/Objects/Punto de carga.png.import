@@ -15,7 +15,7 @@ dest_files=["res://.godot/imported/Punto de carga.png-07e6a2331a6afe1d228d9c266d
 
 [params]
 
-compress/mode=0
+compress/mode=3
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

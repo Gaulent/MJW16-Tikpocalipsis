@@ -1,16 +1,21 @@
-[gd_scene load_steps=14 format=3 uid="uid://bh85hle8n11ly"]
+[gd_scene load_steps=22 format=3 uid="uid://bh85hle8n11ly"]
 
 [ext_resource type="Texture2D" uid="uid://c3il0qqt7p3la" path="res://sprites/Background/carretera.png" id="1_dwe66"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_scqfp"]
-[ext_resource type="Script" path="res://scripts/enemy_spawner.gd" id="2_7mnj6"]
 [ext_resource type="Script" path="res://scripts/texture_scroll.gd" id="2_llxhy"]
+[ext_resource type="PackedScene" uid="uid://bls80wl7b1j2c" path="res://scenes/systems/spawner.tscn" id="2_qag3q"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="3_q21ro"]
-[ext_resource type="PackedScene" uid="uid://b18bvnwgx0fh4" path="res://scenes/dalek.tscn" id="6_4u6jp"]
+[ext_resource type="AudioStream" uid="uid://dqx8fsoyg65qa" path="res://sound/jumpSound.mp3" id="8_pote4"]
 [ext_resource type="Script" path="res://scripts/shredder.gd" id="10_61vem"]
+[ext_resource type="PackedScene" uid="uid://chtjxavhmclpj" path="res://scenes/objects/big_tree.tscn" id="10_psnrl"]
+[ext_resource type="PackedScene" uid="uid://kht0hh1c7lkd" path="res://scenes/objects/dump.tscn" id="11_tp7ox"]
+[ext_resource type="VideoStream" path="res://video/Alma.ogv" id="12_fpt6h"]
+[ext_resource type="PackedScene" uid="uid://dddvkibx8t8dq" path="res://scenes/objects/small_tree2.tscn" id="12_khdd3"]
+[ext_resource type="PackedScene" uid="uid://bpq6tm1lcydbc" path="res://scenes/objects/small_tree.tscn" id="13_yfi8s"]
 
-[sub_resource type="Curve3D" id="Curve3D_5mbvo"]
+[sub_resource type="Curve3D" id="Curve3D_gc8jv"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, -5, 0, 0),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.32, 0, 0, 0, 0, 0, 0, 0, 0, 0.32, 0, 0),
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
@@ -33,26 +38,50 @@ texture_filter = 0
 [sub_resource type="PlaneMesh" id="PlaneMesh_gll8n"]
 material = SubResource("StandardMaterial3D_dkb2e")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_vckwo"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bmi3o"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_vckwo")
+
+[sub_resource type="QuadMesh" id="QuadMesh_nnxxc"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_bmi3o")
+size = Vector2(1, 1.895)
+
 [node name="MainScene" type="Node3D"]
 
 [node name="GameManager" type="Node" parent="." groups=["GameManager"]]
 script = ExtResource("1_scqfp")
 
-[node name="EnemySpawner" type="Node3D" parent="."]
+[node name="Spawners" type="Node" parent="."]
+
+[node name="EnemySpawner" parent="Spawners" instance=ExtResource("2_qag3q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -40)
-script = ExtResource("2_7mnj6")
-spawn_types = Array[PackedScene]([ExtResource("6_4u6jp")])
 
-[node name="Timer" type="Timer" parent="EnemySpawner"]
-wait_time = 0.4
-autostart = true
+[node name="EnvironmentSpawner1" parent="Spawners" instance=ExtResource("2_qag3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.000271142, -40)
+spawn_interval = 0.7
+spawn_types = Array[PackedScene]([ExtResource("10_psnrl"), ExtResource("11_tp7ox"), ExtResource("12_khdd3"), ExtResource("13_yfi8s")])
 
-[node name="SpawnArea" type="Path3D" parent="EnemySpawner"]
-curve = SubResource("Curve3D_5mbvo")
+[node name="SpawnArea" parent="Spawners/EnvironmentSpawner1" index="1"]
+curve = SubResource("Curve3D_gc8jv")
 
-[node name="SpawnPoint" type="PathFollow3D" parent="EnemySpawner/SpawnArea"]
-transform = Transform3D(-4.37111e-08, 0, 0.999995, 0, 0.999991, 0, -0.999994, 0, -4.37112e-08, 0, 0, 0)
-progress = 5.0
+[node name="SpawnPoint" parent="Spawners/EnvironmentSpawner1/SpawnArea" index="0"]
+transform = Transform3D(-4.37111e-08, 0, -0.999995, 0, 0.999991, 0, 0.999994, 0, -4.37112e-08, 0.32, 0, 0)
+
+[node name="EnvironmentSpawner2" parent="Spawners" instance=ExtResource("2_qag3q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -40)
+spawn_interval = 0.7
+spawn_types = Array[PackedScene]([ExtResource("10_psnrl"), ExtResource("11_tp7ox"), ExtResource("12_khdd3"), ExtResource("13_yfi8s")])
+
+[node name="SpawnArea" parent="Spawners/EnvironmentSpawner2" index="1"]
+curve = SubResource("Curve3D_gc8jv")
+
+[node name="SpawnPoint" parent="Spawners/EnvironmentSpawner2/SpawnArea" index="0"]
+transform = Transform3D(-4.37111e-08, 0, -0.999995, 0, 0.999991, 0, 0.999994, 0, -4.37112e-08, 0.32, 0, 0)
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.057, -0.44)
@@ -66,8 +95,8 @@ shape = SubResource("CapsuleShape3D_0t3gv")
 transform = Transform3D(1, 0, 0, 0, 0.995725, 0.0923706, 0, -0.0923706, 0.995725, 0, 1.5, 1.43)
 fov = 40.0
 
-[node name="Dalek" parent="." instance=ExtResource("6_4u6jp")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -24.7932)
+[node name="JumpClip" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource("8_pote4")
 
 [node name="Shredder" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.67)
@@ -85,3 +114,20 @@ shape = SubResource("WorldBoundaryShape3D_6ys5o")
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 20, 0, 0, -20)
 mesh = SubResource("PlaneMesh_gll8n")
 script = ExtResource("2_llxhy")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(576, 1024)
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
+stream = ExtResource("12_fpt6h")
+autoplay = true
+loop = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.08327, -3.63144)
+mesh = SubResource("QuadMesh_nnxxc")
+
+[editable path="Spawners/EnvironmentSpawner1"]
+[editable path="Spawners/EnvironmentSpawner2"]

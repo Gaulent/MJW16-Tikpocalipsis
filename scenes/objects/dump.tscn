@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://kht0hh1c7lkd"]
+
+[ext_resource type="Script" path="res://scripts/enemy_controller.gd" id="1_xjwoi"]
+[ext_resource type="Texture2D" uid="uid://c8ah7r4pubphc" path="res://sprites/Objects/Basura.png" id="2_twbka"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1gi2f"]
+size = Vector3(1, 2.72375, 1)
+
+[node name="Dump" type="Area3D"]
+script = ExtResource("1_xjwoi")
+walk_speed = 0.0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0771568, 0.507898, 0)
+texture_filter = 0
+texture = ExtResource("2_twbka")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45706, 0)
+shape = SubResource("BoxShape3D_1gi2f")

@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://tfosihbqd0vr"]
+
+[ext_resource type="Script" path="res://scripts/enemy_controller.gd" id="1_u2y7u"]
+[ext_resource type="Texture2D" uid="uid://dvlhgqvvkehrq" path="res://sprites/Enemies/charco_acido.png" id="2_adrud"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uaxgb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_adrud")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gbpwm"]
+size = Vector3(2.2, 1.024, 0.233)
+
+[node name="Hole" type="Area3D"]
+script = ExtResource("1_u2y7u")
+walk_speed = 0.0
+
+[node name="Sprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(5.5, 0, 0, 0, -2.40413e-07, 1, 0, -5.5, -4.37114e-08, 0, 0.01, 0)
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_uaxgb")
+autoplay = "default"
+frame_progress = 0.761906
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("BoxShape3D_gbpwm")

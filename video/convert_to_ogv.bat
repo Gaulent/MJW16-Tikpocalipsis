@@ -1,0 +1,1 @@
+ffmpeg -i Alma.mp4 -q:v 6 -q:a 6 Alma.ogv
